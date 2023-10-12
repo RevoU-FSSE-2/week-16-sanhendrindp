@@ -8,12 +8,13 @@ const {
   getUser,
   deleteUser,
 } = require("../controllers/user-controller");
+const loginLimiter = require("../middleware/rate-limit");
 
 // Route for create user
 router.post("/signup", createUser);
 
 // Route for login user
-router.post("/login", loginUser);
+router.post("/login", loginLimiter, loginUser);
 
 // Route for get all user
 router.get("/", checkAuth, checkRole(["admin"]), getUser);
