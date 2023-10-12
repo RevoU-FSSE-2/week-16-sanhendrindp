@@ -20,9 +20,6 @@ const userModel = mongoose.Schema({
     enum: [UserRoles.USER, UserRoles.ADMIN],
     default: UserRoles.USER, // Set to user role as default if none is specified
   },
-  // loginAttempts & lockUntil bisa dihapus jika menerapkan express-rate-limit
-  loginAttempts: { type: Number, default: 0 },
-  lockUntil: { type: Date, default: null },
 });
 
 // Export User model
