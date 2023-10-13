@@ -28,12 +28,12 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use("/uploads", express.static("uploads"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use(
-  OpenApiValidator.middleware({
-    apiSpec: openApiPath,
-    validateRequest: true,
-  })
-);
+// app.use(
+//   OpenApiValidator.middleware({
+//     apiSpec: openApiPath,
+//     validateRequest: true,
+//   })
+// );
 app.use(cookieParser());
 
 const port = process.env.PORT;

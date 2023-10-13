@@ -7,9 +7,6 @@ const jwt = require("jsonwebtoken");
 // const cookieParser = require("cookie-parser");
 // const cookieSecret = "this-is-key-for-cookies";
 
-const accessTokenExp = "1h";
-const refreshTokenExp = "7d";
-
 // app.use(cookieParser(cookieSecret));
 
 const createUser = async (req, res, next) => {
@@ -58,6 +55,10 @@ const loginUser = async (req, res, next) => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    const accessTokenExp = Math.floor(Date.now() / 1000) + 60 * 5;
+    const refreshTokenExp = Math.floor(
+      new Date().setDate(new Date().getDate() + 7)
+    );
 
     if (isPasswordValid) {
       const accessToken = jwt.sign(
@@ -86,14 +87,14 @@ const loginUser = async (req, res, next) => {
 
       // Set access token as a cookie
       res.cookie("access_token", accessToken, {
-        maxAge: 1000 * 60 * 60, // 1 hour expired
+        // maxAge: 1000 * 60 * 60, // 1 hour expired
         httpOnly: true,
         secure: true,
       });
 
       // Set refresh token as a cookie
       res.cookie("refresh_token", refreshToken, {
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days expired
+        // maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days expired
         httpOnly: true,
         secure: true,
       });
@@ -120,8 +121,6 @@ const loginUser = async (req, res, next) => {
 const logoutUser = async (req, res, next) => {
   res.clearCookie("access_token");
   res.clearCookie("refresh_token");
-
-  console.log("tes clear cookies");
 
   res.status(200).json({
     Message: "Logout successful",

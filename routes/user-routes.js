@@ -18,7 +18,7 @@ router.post("/signup", createUser);
 router.post("/login", loginLimiter, loginUser);
 
 // Route for logout user
-router.get("/logout", logoutUser);
+router.post("/logout", logoutUser);
 
 // Route for get all user
 router.get("/", checkAuth, checkRole(["admin"]), getUser);
