@@ -82,6 +82,7 @@ const loginUser = async (req, res, next) => {
         Message: "Login successful",
         AccessToken: accessToken,
         RefreshToken: refreshToken,
+        ExpiredTime: accessTokenExp,
       });
     }
 
