@@ -3,6 +3,9 @@ const User = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+const accessTokenExp = "1h";
+const refreshTokenExp = "7d";
+
 const createUser = async (req, res, next) => {
   try {
     const existingUser = await User.findOne({ email: req.body.email });
@@ -51,7 +54,7 @@ const loginUser = async (req, res, next) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (isPasswordValid) {
-      const token = jwt.sign(
+      const accessToken = jwt.sign(
         {
           userId: user._id,
           email: user.email,
@@ -59,13 +62,26 @@ const loginUser = async (req, res, next) => {
         },
         process.env.JWT_KEY,
         {
-          expiresIn: "1h",
+          expiresIn: accessTokenExp,
+        }
+      );
+
+      const refreshToken = jwt.sign(
+        {
+          userId: user._id,
+          email: user.email,
+          role: user.role,
+        },
+        process.env.JWT_KEY,
+        {
+          expiresIn: refreshTokenExp,
         }
       );
 
       return res.status(200).json({
         Message: "Login successful",
-        Token: token,
+        AccessToken: accessToken,
+        RefreshToken: refreshToken,
       });
     }
 
