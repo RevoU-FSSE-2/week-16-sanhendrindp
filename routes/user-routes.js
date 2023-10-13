@@ -8,6 +8,8 @@ const {
   getUser,
   deleteUser,
   logoutUser,
+  // passwordResetRequest,
+  resetPassword,
 } = require("../controllers/user-controller");
 const loginLimiter = require("../middleware/rate-limit");
 
@@ -25,6 +27,15 @@ router.get("/", checkAuth, checkRole(["admin"]), getUser);
 
 // Route for delete user
 router.delete("/:id", checkAuth, checkRole(["admin"]), deleteUser);
+
+// Route for requesting reset user password
+// router.post("/reset-password", loginUser, passwordResetRequest);
+
+// Route for resetting password
+// router.post("/reset-password/:token", loginUser, resetPassword);
+
+// Route for reset password without request token/key
+router.post("/reset-password", resetPassword);
 
 // Export
 module.exports = router;

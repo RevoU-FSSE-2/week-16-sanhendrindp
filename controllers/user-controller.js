@@ -171,4 +171,101 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { createUser, loginUser, deleteUser, getUser, logoutUser };
+// const passwordResetRequest = async (req, res, next) => {
+//   try {
+//     const { email } = req.body;
+//     const user = await User.findOne({ email }).exec();
+
+//     if (!user) {
+//       return res.status(404).json({
+//         Message: "Email not found",
+//       });
+//     }
+
+//     const token = jwt.sign({ userId: user._id }, process.env.JWT_KEY, {
+//       expiresIn: "1h",
+//     });
+
+//     console.log(`Password reset token for ${email}: ${token}`);
+
+//     res.status(200).json({
+//       Message: "Password reset token has been sent to your email",
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({
+//       Error:
+//         err.message ||
+//         "An error occurred while processing the password reset request",
+//     });
+//   }
+// };
+
+// const resetPassword = async (req, res, next) => {
+//   try {
+//     const { token } = req.params;
+//     const { password } = req.body;
+
+//     const decoded = jwt.verify(token, process.env.JWT_KEY);
+
+//     const user = await User.findById(decoded.userId).exec();
+
+//     if (!user) {
+//       return res.status(404).json({
+//         Message: "User not found",
+//       });
+//     }
+
+//     user.password = await bcrypt.hash(password, 10);
+//     await user.save();
+
+//     res.status(200).json({
+//       Message: "Password has been reset successfully",
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({
+//       Error: err.message || "An error occurred while resetting the password",
+//     });
+//   }
+// };
+
+const resetPassword = async (req, res, next) => {
+  try {
+    const { email, newPassword } = req.body;
+
+    const user = await User.findOne({ email }).exec();
+
+    if (!user) {
+      return res.status(401).json({
+        Message: "Email is incorrect",
+      });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({
+      Message: "Password reset successful",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      Error: err.message || "An error occurred while resetting the password",
+    });
+  }
+};
+
+module.exports = {
+  createUser,
+  loginUser,
+  deleteUser,
+  getUser,
+  logoutUser,
+  // passwordResetRequest,
+  resetPassword,
+};

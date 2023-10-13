@@ -86,7 +86,7 @@ In order-routes.js, i define **client-y** will get allowed by CORS to request ge
     <em>Fetching request in port: 6500 will not allowed by CORS.</em>
   </p> -->
 
-# Make login requests have a limit of 5 times and a limit of 5 times too if enter the user email or password incorrectly.
+<!-- # Make login requests have a limit of 5 times and a limit of 5 times too if enter the user email or password incorrectly.
 
 1. Using express-rate-limit to limit the login request :
 
@@ -98,4 +98,4 @@ In order-routes.js, i define **client-y** will get allowed by CORS to request ge
 
 3. Import rate-limit.js to used in user-routes.js.
 
-4. This rate-limit.js will be implement in /login route.
+4. This rate-limit.js will be implement in /login route. -->
