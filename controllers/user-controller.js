@@ -1,13 +1,7 @@
-// const express = require("express");
-// const app = express();
 const mongoose = require("mongoose");
 const User = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-// const cookieParser = require("cookie-parser");
-// const cookieSecret = "this-is-key-for-cookies";
-
-// app.use(cookieParser(cookieSecret));
 
 const createUser = async (req, res, next) => {
   try {
@@ -55,9 +49,9 @@ const loginUser = async (req, res, next) => {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    const accessTokenExp = Math.floor(Date.now() / 1000) + 60 * 5;
+    const accessTokenExp = Math.floor(Date.now() / 1000) + 60 * 5; // 5 minutes expired
     const refreshTokenExp = Math.floor(
-      new Date().setDate(new Date().getDate() + 7)
+      new Date().setDate(new Date().getDate() + 7) // 7 days expired
     );
 
     if (isPasswordValid) {
