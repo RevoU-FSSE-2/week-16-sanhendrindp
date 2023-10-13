@@ -186,7 +186,7 @@ const passwordResetRequest = async (req, res, next) => {
     user.resetPasswordKey = key;
     await user.save();
 
-    console.log(`Password reset kwy for ${email}: ${key}`);
+    console.log(`Password reset key for ${email}: ${key}`);
 
     res.status(200).json({
       Message: "Password reset key has been sent to your email",
