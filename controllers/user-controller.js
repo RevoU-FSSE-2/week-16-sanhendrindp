@@ -1,10 +1,16 @@
+// const express = require("express");
+// const app = express();
 const mongoose = require("mongoose");
 const User = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+// const cookieParser = require("cookie-parser");
+// const cookieSecret = "this-is-key-for-cookies";
 
 const accessTokenExp = "1h";
 const refreshTokenExp = "7d";
+
+// app.use(cookieParser(cookieSecret));
 
 const createUser = async (req, res, next) => {
   try {
@@ -78,6 +84,20 @@ const loginUser = async (req, res, next) => {
         }
       );
 
+      // Set access token as a cookie
+      res.cookie("access_token", accessToken, {
+        maxAge: 1000 * 60 * 60, // 1 hour expired
+        httpOnly: true,
+        secure: true,
+      });
+
+      // Set refresh token as a cookie
+      res.cookie("refresh_token", refreshToken, {
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days expired
+        httpOnly: true,
+        secure: true,
+      });
+
       return res.status(200).json({
         Message: "Login successful",
         AccessToken: accessToken,
@@ -95,6 +115,17 @@ const loginUser = async (req, res, next) => {
       Error: err.message || "An error occurred while processing the login",
     });
   }
+};
+
+const logoutUser = async (req, res, next) => {
+  res.clearCookie("access_token");
+  res.clearCookie("refresh_token");
+
+  console.log("tes clear cookies");
+
+  res.status(200).json({
+    Message: "Logout successful",
+  });
 };
 
 const getUser = async (req, res, next) => {
@@ -147,4 +178,4 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { createUser, loginUser, deleteUser, getUser };
+module.exports = { createUser, loginUser, deleteUser, getUser, logoutUser };

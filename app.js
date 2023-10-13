@@ -15,6 +15,7 @@ const swaggerUi = require("swagger-ui-express");
 const yaml = require("yaml");
 const fs = require("fs");
 const OpenApiValidator = require("express-openapi-validator");
+const cookieParser = require("cookie-parser");
 
 const openApiPath = "./docs/openapi.yaml";
 const file = fs.readFileSync(openApiPath, "utf-8");
@@ -33,6 +34,7 @@ app.use(
     validateRequest: true,
   })
 );
+app.use(cookieParser());
 
 const port = process.env.PORT;
 
@@ -44,6 +46,7 @@ app.use("/users", requestIdMiddleware, userRoutes);
 // ============================= LISTEN ===============================
 
 app.get("/", requestIdMiddleware, (req, res) => {
+  console.log(req.cookies);
   res.send(
     "Welcome! This is RESTful API Inventory Management System for Computer Store."
   );
